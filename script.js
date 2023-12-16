@@ -108,5 +108,55 @@ function update() {
   }
 }
 
-
+function placePipes() {
+    if (gameOver) {
+      return;
+    }
+  
+    let randomPipeY = pipeY - pipeHeight / 4 - Math.random() * (pipeHeight / 2);
+    let openingSpace = board.height / 4;
+  
+    let topPipe = {
+      img: topPipeImg,
+      x: pipeX,
+      y: randomPipeY,
+      width: pipeWidth,
+      height: pipeHeight,
+      passed: false,
+    };
+    pipeArray.push(topPipe);
+  
+    let bottomPipe = {
+      img: bottomPipeImg,
+      x: pipeX,
+      y: randomPipeY + pipeHeight + openingSpace,
+      width: pipeWidth,
+      height: pipeHeight,
+      passed: false,
+    };
+    pipeArray.push(bottomPipe);
+  }
+  
+  function moveBird(e) {
+    if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyX") {
+      //jump
+      velocityY = -6;
+  
+      if (gameOver) {
+        bird.y = birdY;
+        pipeArray = [];
+        score = 0;
+        gameOver = false;
+      }
+    }
+  }
+  
+  function detectCollision(a, b) {
+    return (
+      a.x < b.x + b.width && //a's top left corner doesn't reach b's top right corner
+      a.x + a.width > b.x && //a's top right corner passes b's top left corner
+      a.y < b.y + b.height && //a's top left corner doesn't reach b's bottom left corner
+      a.y + a.height > b.y
+    ); //a's bottom left corner passes b's top left corner
+  }
   
